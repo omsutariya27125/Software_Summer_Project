@@ -6,7 +6,7 @@ Implement JWT-based authentication and develop the user dashboard and profile ma
 
 ## Sprint Duration
 
-02/07/2026 - 10/07/2026
+02/07/2026 - 09/07/2026
 
 ---
 
