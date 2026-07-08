@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './LandingPage.css';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { ToastContainer, toast } from 'react-toastify';
+import { FaEye, FaEyeSlash, FaMoon, FaSun } from 'react-icons/fa';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-const API_BASE = "http://127.0.0.1:8000"; // you can switch back later
+import { isDarkTheme, loginUser, registerUser, setAuthToken, setThemePreference } from './api';
 
 const LandingPage = ({ onLoginSuccess }) => {
   const [activeTab, setActiveTab] = useState('login');
+  const [darkMode, setDarkMode] = useState(isDarkTheme);
   const [loginData, setLoginData] = useState({ username: '', password: '' });
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
@@ -17,32 +17,19 @@ const LandingPage = ({ onLoginSuccess }) => {
     username: '',
     password: '',
   });
+  
   const [message, setMessage] = useState({ type: '', text: '' });
   const [loading, setLoading] = useState(false);
 
-  const sendJson = async (url, data) => {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+  useEffect(() => {
+    setThemePreference(darkMode);
+  }, [darkMode]);
 
-    const result = await response.json();
-    console.log(result);
-
-    return result;
-  } catch (error) {
-    console.error("Fetch error:", error);
-
-    return {
-      success: false,
-      message: error.message,
-    };
-  }
-};
+  const toggleTheme = () => {
+    const nextMode = !darkMode;
+    setDarkMode(nextMode);
+    setThemePreference(nextMode);
+  };
   const handleLogin = async (e) => {
     e.preventDefault();
     if (!loginData.username.trim() || !loginData.password) {
@@ -53,13 +40,15 @@ const LandingPage = ({ onLoginSuccess }) => {
     setMessage({ type: '', text: '' });
 
     
-    const result = await sendJson(`${API_BASE}/login`, loginData);
+    try {
+      const result = await loginUser(loginData);
 
 console.log("Login response:", result);
 
 setLoading(false);
 
-if (result.success) {  
+if (result.success || result.Success) {  
+  setAuthToken(result.access_token);
 
   setMessage({
     type: "success",
@@ -76,7 +65,12 @@ if (result.success) {
     type: "error",
     text: result.message || "Invalid username or password",
   });
-}  };
+}
+    } catch (error) {
+      setLoading(false);
+      setMessage({ type: 'error', text: error.message || 'Unable to login right now.' });
+    }
+  };
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -94,14 +88,12 @@ if (result.success) {
 
     
 
-    const result = await sendJson(
-    `${API_BASE}/register`,
-    registerData
-);
+    try {
+      const result = await registerUser(registerData);
 
 setLoading(false);
 
-if(result.success){
+if(result.success || result.Nicee){
 
     setMessage({
         type:"success",
@@ -128,6 +120,10 @@ else{
     });
 
 }
+    } catch (error) {
+      setLoading(false);
+      setMessage({ type: 'error', text: error.message || 'Unable to register right now.' });
+    }
   };
 
   const switchTab = (tab) => {
@@ -136,7 +132,16 @@ else{
   };
 
   return (
-    <div className="auth-container">
+      
+    <div className={`auth-container ${darkMode ? 'dark' : 'light'}`}>
+      <button className="auth-theme-toggle" onClick={toggleTheme} title="Toggle theme" aria-label={darkMode ? 'Switch to light theme' : 'Switch to dark theme'}>
+        {darkMode ? <FaSun /> : <FaMoon />}
+      </button>
+      
+      <div className="hero-header">
+    <h1>MathGenius</h1>
+    <p>AI-Powered Mathematics Practice Portal</p>
+  </div>
       <div className="form-card">
         <div className="tab-switcher">
           <button
@@ -145,6 +150,7 @@ else{
           >
             Login
           </button>
+          
           <button
             className={`tab ${activeTab === 'register' ? 'active' : ''}`}
             onClick={() => switchTab('register')}
@@ -175,7 +181,14 @@ else{
                     setLoginData({ ...loginData, password: e.target.value })
                   }
                 />
-                
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowLoginPassword(!showLoginPassword)}
+                  aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showLoginPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
               <div className="forgot-password">
                 <a href="/forgot-password">Forgot Password?</a>
@@ -219,19 +232,22 @@ else{
               <div className="password-container">
                 <input
                   type={showRegisterPassword ? "text" : "password"}
-                  placeholder="Create a password"
+                  placeholder="••••••••"
                   value={registerData.password}
                   onChange={(e) =>
                     setRegisterData({ ...registerData, password: e.target.value })
                   }
                 />
-                <span
-                  className="eye-icon"
+                <button
+                  type="button"
+                  className="password-toggle"
                   onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                  aria-label={showRegisterPassword ? 'Hide password' : 'Show password'}
                 >
                   {showRegisterPassword ? <FaEyeSlash /> : <FaEye />}
-                </span>
+                </button>
               </div>
+             
             </div>
             <button type="submit" className="submit-btn" disabled={loading}>
               {loading ? 'Creating account...' : 'Create Account'}
