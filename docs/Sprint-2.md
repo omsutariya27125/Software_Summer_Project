@@ -2,7 +2,7 @@
 
 ## Sprint Goal
 
-Implement JWT-based authentication and develop the user dashboard and profile management features.
+Implement secure JWT-based authentication and develop the homepage module with chapter navigation, backend APIs, and frontend integration.
 
 ## Sprint Duration
 
@@ -14,74 +14,118 @@ Implement JWT-based authentication and develop the user dashboard and profile ma
 
 ### US-5: Secure Session Management
 
-As a logged-in student, I want my session to remain active securely so that I do not need to log in repeatedly.
+As a logged-in student, I want my session to remain active securely using JWT so that I do not need to log in repeatedly.
 
-### US-6: Protected Route Access
+### US-6: Protected Homepage Access
 
-As a student, I want only authenticated users to access the dashboard and profile pages so that my data remains secure.
+As a student, I want only authenticated users to access the homepage so that my learning data remains secure.
 
-### US-7: Dashboard Access
+### US-7: Personalized Homepage
 
-As a logged-in student, I want to view a personalized dashboard so that I can access platform features quickly.
+As a logged-in student, I want to view my homepage with learning progress so that I can continue my preparation efficiently.
 
-### US-8: View Profile Information
+### US-8: Browse Topics
 
-As a student, I want to view my personal information so that I can verify my account details.
+As a student, I want to view all available learning topics so that I can choose what I want to practice.
 
-### US-9: View Academic Goals
+### US-9: Browse Chapters
 
-As a student, I want to view my academic goals and preferences so that I can monitor my preparation targets.
+As a student, I want each topic to display its respective chapters so that I can navigate directly to the chapter I want to solve.
 
-### US-10: Logout
+### US-10: Theme Switching
 
-As a student, I want to securely log out of my account so that unauthorized users cannot access my account.
+As a student, I want to switch between light and dark themes so that I can use the platform comfortably.
+
+---
+
+# Topics and Chapters
+
+### Algebra
+- Functions
+- Quadratic Equations
+- Complex Numbers
+- Sequences and Series
+- Binomial Theorem
+
+### Calculus
+- Limits
+- Continuity and Differentiability
+- Applications of Derivatives
+- Indefinite Integration
+- Definite Integration
+
+### Coordinate Geometry
+- Straight Lines
+- Circles
+- Parabola
+- Ellipse
+- Hyperbola
+
+### Trigonometry
+- Trigonometric Ratios
+- Trigonometric Equations
+- Inverse Trigonometric Functions
+- Heights and Distances
+
+### Probability & Statistics
+- Probability
+- Conditional Probability
+- Random Variables
+- Statistics
 
 ---
 
 ## Sprint Deliverables
 
 - JWT Authentication
-- Protected Routes
-- Welcome Dashboard
-- User Profile Page
-- MongoDB User Profile Integration
-- Logout Functionality
+- Protected Homepage Routes
+- Homepage UI
+- Chapter Navigation Page
+- Homepage Backend APIs
+- Chapter Backend APIs
+- MongoDB Database Schema
+- Frontend and Backend Integration
+- Theme Switching
 
 ---
+
 ## Team Allocation
-
-### Om (Frontend)
-
-- Dashboard UI Development
-- Welcome Page Development
-- Frontend Integration with APIs
-- Protected Route Implementation
 
 ### Kushal (Backend)
 
-- JWT Token Generation
-- JWT Verification Middleware
-- Protected API Routes
-- User Profile APIs
-- Authentication Testing
+- Designed and implemented the complete backend using FastAPI.
+- Implemented JWT authentication.
+- Developed authentication and authorization APIs.
+- Designed MongoDB database schema and collections.
+- Developed Homepage APIs.
+- Developed Chapter APIs.
+- Integrated React frontend with backend APIs.
+- Developed the Chapters page.
 
-### Ved (Frontend & Database Support)
+### Om (Frontend)
 
-- Profile Page UI Development
-- UI Component Design and Styling
-- MongoDB User Profile Schema
-- Database Connectivity Support
-- Testing and Validation
+- Developed the Welcome Page.
+- Developed the Login/Register Page.
+- Developed the Homepage UI.
+- Implemented Light/Dark Theme switching.
+
+### Ved (Frontend Support)
+
+- Assisted in frontend development.
+- UI testing and styling support.
+- Classified chapters into topics
+
 ---
 
 ## Success Criteria
 
-- JWT tokens are generated after successful login.
-- Protected pages cannot be accessed without authentication.
-- Dashboard is displayed after login.
-- User profile data is fetched from MongoDB.
-- User information is displayed correctly on the profile page.
-- Logout invalidates the user session.
+- Users can log in successfully using JWT authentication.
+- Homepage is accessible only after successful authentication.
+- Homepage fetches data from backend APIs.
+- Topics are displayed successfully.
+- Selecting a topic displays its respective chapters.
+- Theme switching works correctly.
+- Backend APIs communicate successfully with the React frontend.
 
 ---
 
@@ -89,8 +133,9 @@ As a student, I want to securely log out of my account so that unauthorized user
 
 A student should be able to:
 
-- Log in securely using JWT authentication.
-- Access protected pages.
-- View the dashboard.
-- View profile information.
-- Log out securely.
+- Log in securely using JWT.
+- Access the personalized homepage.
+- Browse available learning topics.
+- View chapters corresponding to each topic.
+- Navigate through chapters easily.
+- Switch between light and dark themes.
