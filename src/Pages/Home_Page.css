@@ -161,7 +161,7 @@ body.dark-theme {
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background: #0f172a,
+  background: #0f172a;
   color: #fff;
   border-bottom: 1px solid #e9edf4;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
