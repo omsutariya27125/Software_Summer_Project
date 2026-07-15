@@ -24,7 +24,7 @@ pwd_context = PasswordContext()
 
 def create_access_token(data: dict):
      to_encode = data.copy()
-     expire = datetime.utcnow() + timedelta(minutes=30)
+     expire = datetime.utcnow() + timedelta(minutes=30 * 1440)
      to_encode.update({"exp": expire})
 
      encoded_jwt = jwt.encode(

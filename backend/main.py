@@ -18,6 +18,8 @@ from pymongo.errors import PyMongoError
 from routes.authorisation import router as auth_router
 from routes.homepage import router as homepage_router
 from routes.attempt import router as attempt_router
+from routes.questions import router as questions_router
+from routes.profile import router as profile_router
 
 # Use the default uvicorn error logger to output messages to the terminal
 logger = logging.getLogger("uvicorn.error")
@@ -100,3 +102,5 @@ async def universal_exception_handler(request: Request, exc: Exception):
 app.include_router(auth_router)
 app.include_router(homepage_router)
 app.include_router(attempt_router)
+app.include_router(questions_router)
+app.include_router(profile_router)
