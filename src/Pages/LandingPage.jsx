@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './LandingPage.css';
-import { FaEye, FaEyeSlash, FaMoon, FaSun } from 'react-icons/fa';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { isDarkTheme, loginUser, registerUser, setAuthToken, setThemePreference } from './api';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+ //import 'react-toastify/dist/ReactToastify.css';
+
+const API_BASE = "https://demo-backend-cf9b.onrender.com"; // you can switch back later
 
 const LandingPage = ({ onLoginSuccess }) => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('login');
-  const [darkMode, setDarkMode] = useState(isDarkTheme);
   const [loginData, setLoginData] = useState({ username: '', password: '' });
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
@@ -15,20 +17,35 @@ const LandingPage = ({ onLoginSuccess }) => {
     name: '',
     email: '',
     username: '',
-    password: '',
+    mobileNumber: '',
+    password: ''
   });
-  
+
   const [message, setMessage] = useState({ type: '', text: '' });
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setThemePreference(darkMode);
-  }, [darkMode]);
+  const sendJson = async (url, data) => {
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-  const toggleTheme = () => {
-    const nextMode = !darkMode;
-    setDarkMode(nextMode);
-    setThemePreference(nextMode);
+      const result = await response.json();
+      console.log(result);
+
+      return result;
+    } catch (error) {
+      console.error("Fetch error:", error);
+
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
   };
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -39,43 +56,36 @@ const LandingPage = ({ onLoginSuccess }) => {
     setLoading(true);
     setMessage({ type: '', text: '' });
 
-    
-    try {
-      const result = await loginUser(loginData);
 
-console.log("Login response:", result);
+    const result = await sendJson(`${API_BASE}/login`, loginData);
 
-setLoading(false);
+    console.log("Login response:", result);
 
-if (result.success || result.Success) {  
-  setAuthToken(result.access_token);
+    setLoading(false);
 
-  setMessage({
-    type: "success",
-    text: "Login successful!",
-  });
+    if (result.Success) {
+      localStorage.setItem('authToken', result.access_token || "demo-token");
+      setMessage({
+        type: "success",
+        text: "Login successful!",
+      });
 
-  setTimeout(() => {
-    console.log("Calling onLoginSuccess");
-    if (onLoginSuccess) onLoginSuccess();
-  }, 1000);
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
 
-} else {
-  setMessage({
-    type: "error",
-    text: result.message || "Invalid username or password",
-  });
-}
-    } catch (error) {
-      setLoading(false);
-      setMessage({ type: 'error', text: error.message || 'Unable to login right now.' });
+    } else {
+      setMessage({
+        type: "error",
+        text: result.message || "Invalid username or password",
+      });
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    const { name, email, username, password } = registerData;
-    if (!name.trim() || !email.trim() || !username.trim() || !password) {
+    const { name, email, username, mobileNumber, password } = registerData;
+    if (!name.trim() || !email.trim() || !username.trim() || !password.trim() || !mobileNumber.trim()) {
       setMessage({ type: 'error', text: 'All fields are required.' });
       return;
     }
@@ -83,46 +93,49 @@ if (result.success || result.Success) {
       setMessage({ type: 'error', text: 'Invalid email address.' });
       return;
     }
+    if (!mobileNumber.match(/^\d{10}$/)) {
+      setMessage({ type: 'error', text: 'Invalid mobile number. It should be 10 digits.' });
+      return;
+    }
     setLoading(true);
     setMessage({ type: '', text: '' });
 
-    
 
-    try {
-      const result = await registerUser(registerData);
 
-setLoading(false);
+    const result = await sendJson(
+      `${API_BASE}/register`,
+      registerData
+    );
 
-if(result.success || result.Nicee){
+    setLoading(false);
 
-    setMessage({
-        type:"success",
-        text:"Account created successfully."
-    });
+    if (result.success) {
 
-    setRegisterData({
-        name:"",
-        email:"",
-        username:"",
-        password:""
-    });
+      setMessage({
+        type: "success",
+        text: "Account created successfully."
+      });
 
-    setTimeout(()=>{
+      setRegisterData({
+        name: "",
+        email: "",
+        username: "",
+        mobileNumber: "",
+        password: ""
+      });
+
+      setTimeout(() => {
         setActiveTab("login");
-    },1000);
+      }, 1000);
 
-}
-else{
+    }
+    else {
 
-    setMessage({
-        type:"error",
-        text:result.message
-    });
+      setMessage({
+        type: "error",
+        text: result.message
+      });
 
-}
-    } catch (error) {
-      setLoading(false);
-      setMessage({ type: 'error', text: error.message || 'Unable to register right now.' });
     }
   };
 
@@ -132,16 +145,13 @@ else{
   };
 
   return (
-      
-    <div className={`auth-container ${darkMode ? 'dark' : 'light'}`}>
-      <button className="auth-theme-toggle" onClick={toggleTheme} title="Toggle theme" aria-label={darkMode ? 'Switch to light theme' : 'Switch to dark theme'}>
-        {darkMode ? <FaSun /> : <FaMoon />}
-      </button>
-      
+
+    <div className="auth-container">
+
       <div className="hero-header">
-    <h1>MathGenius</h1>
-    <p>AI-Powered Mathematics Practice Portal</p>
-  </div>
+        <h1>MathGenius</h1>
+        <p>AI-Powered Mathematics Practice Portal</p>
+      </div>
       <div className="form-card">
         <div className="tab-switcher">
           <button
@@ -150,7 +160,7 @@ else{
           >
             Login
           </button>
-          
+
           <button
             className={`tab ${activeTab === 'register' ? 'active' : ''}`}
             onClick={() => switchTab('register')}
@@ -183,11 +193,12 @@ else{
                 />
                 <button
                   type="button"
-                  className="password-toggle"
+                  className="password-toggle-btn"
                   onClick={() => setShowLoginPassword(!showLoginPassword)}
-                  aria-label={showLoginPassword ? 'Hide password' : 'Show password'}
+                  tabIndex={-1}   // prevent focus stealing
+                  aria-label={showLoginPassword ? "Hide password" : "Show password"}
                 >
-                  {showLoginPassword ? <FaEyeSlash /> : <FaEye />}
+                  <i className={`fas ${showLoginPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                 </button>
               </div>
               <div className="forgot-password">
@@ -228,10 +239,19 @@ else{
               />
             </div>
             <div className="input-group">
+              <label>Mobile Number</label>
+              <input
+                type="text"
+                placeholder="1234567890"
+                value={registerData.mobileNumber}
+                onChange={(e) => setRegisterData({ ...registerData, mobileNumber: e.target.value })}
+              />
+            </div>
+            <div className="input-group">
               <label>Password</label>
               <div className="password-container">
                 <input
-                  type={showRegisterPassword ? "text" : "password"}
+                  type={showLoginPassword ? "text" : "password"}
                   placeholder="••••••••"
                   value={registerData.password}
                   onChange={(e) =>
@@ -240,14 +260,14 @@ else{
                 />
                 <button
                   type="button"
-                  className="password-toggle"
-                  onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-                  aria-label={showRegisterPassword ? 'Hide password' : 'Show password'}
+                  className="password-toggle-btn"
+                  onClick={() => setShowLoginPassword(!showLoginPassword)}
+                  tabIndex={-1}   // prevent focus stealing
+                  aria-label={showLoginPassword ? "Hide password" : "Show password"}
                 >
-                  {showRegisterPassword ? <FaEyeSlash /> : <FaEye />}
+                  <i className={`fas ${showLoginPassword ? "fa-eye-slash" : "fa-eye"}`}></i>
                 </button>
               </div>
-             
             </div>
             <button type="submit" className="submit-btn" disabled={loading}>
               {loading ? 'Creating account...' : 'Create Account'}

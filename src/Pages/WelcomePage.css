@@ -1,41 +1,13 @@
 .welcome-container {
-  position: relative;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
   color: white;
   font-family: 'Segoe UI', sans-serif;
   text-align: center;
   padding: 2rem;
-}
-
-.welcome-container.light {
-  background: linear-gradient(135deg, #e0f2fe 0%, #eef2ff 100%);
-  color: #172554;
-}
-
-.welcome-theme-toggle {
-  position: absolute;
-  top: 24px;
-  right: 24px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.16);
-  color: #facc15;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.welcome-container.light .welcome-theme-toggle {
-  background: #1e293b;
-  color: #f8fafc;
 }
 
 .welcome-content h1 {
@@ -57,7 +29,6 @@
 }
 
 .feature-icons span {
-  align-items: center;
   font-size: 1.2rem;
   background: rgba(255, 255, 255, 0.1);
   padding: 0.6rem 1.5rem;

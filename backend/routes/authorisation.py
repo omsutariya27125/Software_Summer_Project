@@ -39,7 +39,8 @@ def register(new_user: UserRegistration):
          user = user_collection.find_one({
                  "$or":[
           {"username" : new_user.username},
-          {"email": new_user.email}]
+          {"email": new_user.email},
+          {"mobileNumber": new_user.mobileNumber}]
      })
          if user is not None:
               return{
@@ -53,7 +54,10 @@ def register(new_user: UserRegistration):
                         "name" : new_user.name,
                         "email" : new_user.email,
                         "username":new_user.username,
-                        "password": hashed_pass
+                        "mobileNumber": new_user.mobileNumber,
+                        "password": hashed_pass,
+                        "dob": "",
+                        "board": ""
                    }
               )
          return{

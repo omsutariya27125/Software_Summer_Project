@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Header, HTTPException
 
 from auth import get_username_from_auth
-from db import attempt_collection, question_collection, user_collection
+from db import attempt_collection, question_collection, user_collection, chapter_collection
 
 router = APIRouter()
 
@@ -155,7 +155,6 @@ def topicwise(token: str | None = None, authorization: str | None = Header(defau
          "topics":topics
      }
 
-
 @router.get("/chapters/{topic_slug}")
 def chapters(topic_slug: str, token: str | None = None, authorization: str | None = Header(default=None)):
      username_from_token(token, authorization)
@@ -186,3 +185,33 @@ def chapters(topic_slug: str, token: str | None = None, authorization: str | Non
           "total_questions": sum(chapter["question_count"] for chapter in chapters_payload),
           "topics": list(DEFAULT_TOPICS.keys()),
      }
+
+@router.get("/chapter")
+def get_chapter(chapter: bool = False, token: str | None = None, authorization: str | None = Header(default=None)):
+    username_from_token(token, authorization)
+
+    if(chapter):
+        chapters_list = list(chapter_collection.find({}, {"_id": 0, "Topic": 1, "Chapters": 1}))
+        if not chapters_list:
+            raise HTTPException(status_code=404, detail="No chapters found.")
+        return {
+            "success": True,
+            "data": chapters_list
+        }
+    else:
+        topic_list = list(chapter_collection.find({}, {"_id": 0, "Topic": 1}))
+        if not topic_list:
+            raise HTTPException(status_code=404, detail="No topics found.")
+        return {
+            "success": True,
+            "topics": topic_list
+        }
+
+    # chapter_data = chapter_collection.find_one({"chapter": chapter})
+    # if not chapter_data:
+    #     raise HTTPException(status_code=404, detail="Chapter not found")
+
+    # return {
+    #     "success": True,
+    #     "chapter": chapter_data
+    # }
