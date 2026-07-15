@@ -183,7 +183,7 @@ const Profile = () => {
           </div>
           <div className="info-item">
             <span className="info-label">Phone</span>
-            <span className="info-value">{profile.personal.phoneNumber}</span>
+            <span className="info-value">{profile.personal.mobileNumber}</span>
           </div>
           <div className="info-item">
             <span className="info-label">Date of Birth</span>
