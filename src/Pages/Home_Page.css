@@ -1,0 +1,355 @@
+/* ---------- BASE & DARK MODE ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background:
+    linear-gradient(rgb(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(rgba(0, 0, 0, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.3) 1px, transparent 1px),
+    linear-gradient(rgba(0, 0, 0, 0.7) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.7) 1px, transparent 1px),
+    #f4f7fc;
+  background-size:
+    10px 10px,
+    10px 10px,
+    50px 50px,
+    50px 50px,
+    100px 100px,
+    100px 100px,
+    auto;
+  color: #1e293b;
+  transition: background 0.3s, color 0.3s;
+}
+
+body.dark-theme {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(42, 119, 169, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42, 119, 169, 0.3) 1px, transparent 1px),
+    linear-gradient(rgba(42, 119, 169, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(42, 119, 169, 0.5) 1px, transparent 1px),
+    #0f172a;
+  background-size:
+    10px 10px,
+    10px 10px,
+    50px 50px,
+    50px 50px,
+    100px 100px,
+    100px 100px,
+    auto;
+  color: #e2e8f0;
+}
+
+.dashboard-root {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ---------- SIDEBAR ---------- */
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 24px 12px;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease, min-width 0.3s ease;
+  overflow: hidden;
+  box-shadow: 2px 0 20px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+}
+
+.sidebar.minimized {
+  width: 72px;
+  min-width: 72px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  padding-left: 4px;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.brand-text {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+  color: #f8fafc;
+  white-space: nowrap;
+}
+
+.brand-text span {
+  color: #3b82f6;
+}
+
+.hidden {
+  display: none;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  color: #cbd5e1;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+}
+
+.nav-item.active {
+  background: rgba(59, 130, 246, 0.18);
+  color: #60a5fa;
+  box-shadow: inset 3px 0 0 #3b82f6;
+}
+
+.nav-icon {
+  width: 22px;
+  font-size: 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* ---------- MAIN ---------- */
+.main-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- TOP BAR ---------- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: #fff;
+  border-bottom: 1px solid #e9edf4;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+  transition: background 0.3s;
+  width: 100%;
+}
+
+.dark .topbar {
+  background: #1e293b;
+  border-bottom-color: #334155;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hamburger {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: inherit;
+  padding: 4px;
+}
+
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: inherit;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.icon-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.notification {
+  position: relative;
+}
+
+.dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background: #f43f5e;
+  border-radius: 50%;
+  border: 2px solid white;
+}
+
+.avatar-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.avatar-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+}
+
+.avatar-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.14);
+  min-width: 140px;
+  z-index: 20;
+  overflow: hidden;
+}
+
+.avatar-menu-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 10px 14px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.avatar-menu-item:hover {
+  background: #f8fafc;
+}
+
+.avatar-menu-item.danger {
+  color: #dc2626;
+}
+
+.avatar-btn:focus,
+.avatar-btn:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.28);
+}
+
+.dark .avatar {
+  border-color: rgba(226, 232, 240, 0.9);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.35);
+}
+
+.username {
+  font-weight: 500;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+.username.hidden {
+  display: none;
+}
+
+
+
+
+/* Ensure the avatar link has no extra styling */
+.avatar-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+/* ---------- RESPONSIVE ---------- */
+/* @media (max-width: 1200px) {
+  .content-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+} */
+
+@media (max-width: 768px) {
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transform: translateX(0);
+    transition: transform 0.3s;
+  }
+
+  .sidebar.minimized {
+    transform: translateX(-100%);
+  }
+}
